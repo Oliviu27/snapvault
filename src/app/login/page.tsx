@@ -114,7 +114,7 @@ export default function Login() {
 
           {/* Footer */}
           <div className="text-center mt-8 text-blue-300/70">
-            <p className="text-sm">⚔️ Secure as Davy Jones' Locker ⚔️</p>
+            <p className="text-sm">⚔️ Secure as Davy Jones Locker ⚔️</p>
           </div>
         </div>
       </div>
