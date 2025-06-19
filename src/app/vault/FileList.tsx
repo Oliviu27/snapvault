@@ -27,6 +27,14 @@ export default function FileList() {
 
   if (!rows.length) return <p className="text-slate-400">No files yet.</p>;
 
+  async function getUrl(path: string) {
+    const { data, error } = await supabase
+      .storage
+      .from('vault')
+      .createSignedUrl(path, 60);          // 60-second token
+    return error ? null : data.signedUrl;
+  }
+
   return (
     <table className="w-full text-sm">
       <thead>
@@ -38,17 +46,18 @@ export default function FileList() {
         {rows.map(row => (
           <tr key={row.id} className="border-t border-slate-700">
             <td>{row.filename}</td>
-            <td>{(row.size/1024).toFixed(1)} KB</td>
+            <td>{(row.size / 1024).toFixed(1)} KB</td>
             <td>{new Date(row.created_at).toLocaleString()}</td>
             <td>
-              <a
+              <button
                 className="underline"
-                href={supabase.storage.from('vault')
-                  .getPublicUrl(row.object_path).data.publicUrl}
-                download
+                onClick={async () => {
+                  const url = await getUrl(row.object_path);
+                  if (url) window.open(url, '_blank');
+                }}
               >
                 Download
-              </a>
+              </button>
             </td>
           </tr>
         ))}
