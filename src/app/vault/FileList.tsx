@@ -1,6 +1,6 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabase';
+"use client";
+import { useEffect, useState } from "react";
+import { supabase } from "../../../lib/supabase";
 
 type Row = {
   id: string;
@@ -17,16 +17,14 @@ export default function FileList() {
   useEffect(() => {
     async function load() {
       const { data, error } = await supabase
-        .from('vault_files')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("vault_files")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (!error) setRows(data as Row[]);
     }
     load();
   }, []);
-
-  if (!rows.length) return <p className="text-slate-400">No files yet.</p>;
-
+  
   async function getUrl(path: string) {
     const { data, error } = await supabase
       .storage
@@ -35,33 +33,75 @@ export default function FileList() {
     return error ? null : data.signedUrl;
   }
 
+  if (!rows.length)
+    return (
+      <div className="text-center py-8">
+        <div className="text-6xl mb-4">🏴‍☠️</div>
+        <p className="text-amber-300 text-lg font-medium">
+          Yer treasure chest be empty, matey!
+        </p>
+        <p className="text-slate-400 text-sm mt-2">
+          Start stowin' some digital booty above ⚔️
+        </p>
+      </div>
+    );
+
   return (
-    <table className="w-full text-sm">
-      <thead>
-        <tr className="text-left text-slate-400">
-          <th>Name</th><th>Size</th><th>Date</th><th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map(row => (
-          <tr key={row.id} className="border-t border-slate-700">
-            <td>{row.filename}</td>
-            <td>{(row.size / 1024).toFixed(1)} KB</td>
-            <td>{new Date(row.created_at).toLocaleString()}</td>
-            <td>
-              <button
-                className="underline"
-                onClick={async () => {
-                  const url = await getUrl(row.object_path);
-                  if (url) window.open(url, '_blank');
-                }}
-              >
-                Download
-              </button>
-            </td>
+    <div className="overflow-hidden rounded-lg border-2 border-amber-600/30 bg-gradient-to-br from-slate-800/40 to-slate-900/60">
+      <table className="w-full text-sm">
+        <thead className="bg-gradient-to-r from-amber-900/50 to-amber-800/50 border-b-2 border-amber-600/30">
+          <tr className="text-left text-amber-200">
+            <th className="px-4 py-3 font-bold">
+              <span className="mr-2">📜</span>Treasure Name
+            </th>
+            <th className="px-4 py-3 font-bold">
+              <span className="mr-2">⚖️</span>Weight
+            </th>
+            <th className="px-4 py-3 font-bold">
+              <span className="mr-2">🗓️</span>Date Stashed
+            </th>
+            <th className="px-4 py-3 font-bold">
+              <span className="mr-2">⚓️</span>Actions
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr
+              key={row.id}
+              className={`border-t border-slate-600/30 hover:bg-amber-900/20 transition-colors ${
+                index % 2 === 0 ? "bg-slate-800/20" : "bg-slate-700/20"
+              }`}
+            >
+              <td className="px-4 py-3 text-slate-200 font-medium">
+                <div className="flex items-center">
+                  <span className="mr-2 text-amber-400">💰</span>
+                  {row.filename}
+                </div>
+              </td>
+              <td className="px-4 py-3 text-slate-300">
+                {(row.size / 1024).toFixed(1)} KB
+              </td>
+              <td className="px-4 py-3 text-slate-300">
+                {new Date(row.created_at).toLocaleString()}
+              </td>
+              <td className="px-4 py-3">
+                
+                <button
+                  className="underline"
+                  onClick={async () => {
+                    const url = await getUrl(row.object_path);
+                    if (url) window.open(url, '_blank');
+                  }}
+                >
+                  <span className="mr-1">🏴‍☠️</span>
+                  Plunder
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
