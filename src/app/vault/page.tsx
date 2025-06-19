@@ -5,6 +5,11 @@ import UploadPanel from "./UploadPanel";
 export default function VaultPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 p-6 text-white relative overflow-hidden">
+      {/* Logout Button - Top Right */}
+      <div className="absolute top-6 right-6 z-20">
+        <LogoutButton />
+      </div>
+
       {/* Ocean waves background effect */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-600 to-transparent"></div>
@@ -57,8 +62,6 @@ export default function VaultPage() {
             </div>
           </div>
         </div>
-        
-        <LogoutButton />
 
         {/* Footer */}
         <div className="text-center mt-12 text-blue-300/70">

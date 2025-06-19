@@ -24,12 +24,11 @@ export default function FileList() {
     }
     load();
   }, []);
-  
+
   async function getUrl(path: string) {
-    const { data, error } = await supabase
-      .storage
-      .from('vault')
-      .createSignedUrl(path, 60);          // 60-second token
+    const { data, error } = await supabase.storage
+      .from("vault")
+      .createSignedUrl(path, 60); // 60-second token
     return error ? null : data.signedUrl;
   }
 
@@ -41,7 +40,7 @@ export default function FileList() {
           Yer treasure chest be empty, matey!
         </p>
         <p className="text-slate-400 text-sm mt-2">
-          Start stowin' some digital booty above ⚔️
+          Start stowin some digital booty above ⚔️
         </p>
       </div>
     );
@@ -86,12 +85,11 @@ export default function FileList() {
                 {new Date(row.created_at).toLocaleString()}
               </td>
               <td className="px-4 py-3">
-                
                 <button
-                  className="underline"
+                  className="inline-flex items-center px-3 py-1 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-medium rounded-lg transition-all transform hover:scale-105 text-xs shadow-md border border-amber-500/50"
                   onClick={async () => {
                     const url = await getUrl(row.object_path);
-                    if (url) window.open(url, '_blank');
+                    if (url) window.open(url, "_blank");
                   }}
                 >
                   <span className="mr-1">🏴‍☠️</span>
